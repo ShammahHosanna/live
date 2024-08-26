@@ -1,7 +1,31 @@
-#include <stdio.h>
+int m = pattern.length();
+        int n = str.length();
 
-int main (){
+        // Créer une table DP
+        int[][] dp = new int[m + 1][n + 1];
 
-    printf("sauve");
-    return 0;
-}
+        // Cas de base : un motif vide correspond à une chaîne vide
+        dp[0][0] = 1;
+
+        // Remplir la première colonne (lorsque la chaîne est vide)
+        for (int i = 1; i <= m; i++) {
+            if (pattern.charAt(i - 1) == '*') {
+                dp[i][0] = dp[i - 1][0];
+            }
+        }
+
+        // Remplir la table DP
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (pattern.charAt(i - 1) == '*') {
+                    dp[i][j] = dp[i - 1][j] == 1 || dp[i][j - 1] == 1 ? 1 : 0;
+                } else if (pattern.charAt(i - 1) == '?' || pattern.charAt(i - 1) == str.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = 0;
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
